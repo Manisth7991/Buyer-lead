@@ -8,7 +8,7 @@ import { ZodError } from 'zod'
 // GET /api/buyers/[id] - Get single buyer
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions)
@@ -16,8 +16,11 @@ export async function GET(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        // Await params for Next.js 15
+        const { id } = await params
+
         const buyer = await prisma.buyer.findUnique({
-            where: { id: params.id },
+            where: { id },
             include: {
                 owner: {
                     select: { id: true, name: true, email: true }
@@ -57,7 +60,7 @@ export async function GET(
 // PUT /api/buyers/[id] - Update buyer
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions)
@@ -65,12 +68,25 @@ export async function PUT(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
-        const body = await request.json()
+        // Await params for Next.js 15
+        const { id } = await params
+
+        let body
+        try {
+            body = await request.json()
+        } catch (error) {
+            console.error('JSON parsing error:', error)
+            return NextResponse.json(
+                { error: 'Invalid JSON in request body' },
+                { status: 400 }
+            )
+        }
+
         const validatedData = UpdateBuyerSchema.parse(body)
 
         // Check if buyer exists and user owns it
         const existingBuyer = await prisma.buyer.findUnique({
-            where: { id: params.id },
+            where: { id },
             select: { id: true, ownerId: true, updatedAt: true }
         })
 
@@ -93,7 +109,7 @@ export async function PUT(
 
         // Get current buyer for diff
         const currentBuyer = await prisma.buyer.findUnique({
-            where: { id: params.id }
+            where: { id }
         })
 
         // Convert tags array to JSON string
@@ -102,7 +118,7 @@ export async function PUT(
         const updatedBuyer = await prisma.$transaction(async (tx: any) => {
             // Update buyer
             const buyer = await tx.buyer.update({
-                where: { id: params.id },
+                where: { id },
                 data: {
                     ...validatedData,
                     tags: tagsJson,
@@ -132,7 +148,7 @@ export async function PUT(
             if (Object.keys(diff).length > 0) {
                 await tx.buyerHistory.create({
                     data: {
-                        buyerId: params.id,
+                        buyerId: id,
                         changedBy: session.user.id,
                         diff: { action: 'updated', changes: diff }
                     }
@@ -169,7 +185,7 @@ export async function PUT(
 // DELETE /api/buyers/[id] - Delete buyer
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const session = await getServerSession(authOptions)
@@ -177,9 +193,12 @@ export async function DELETE(
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
         }
 
+        // Await params for Next.js 15
+        const { id } = await params
+
         // Check if buyer exists and user owns it
         const existingBuyer = await prisma.buyer.findUnique({
-            where: { id: params.id },
+            where: { id },
             select: { id: true, ownerId: true, fullName: true }
         })
 
@@ -195,7 +214,7 @@ export async function DELETE(
             // Create history entry
             await tx.buyerHistory.create({
                 data: {
-                    buyerId: params.id,
+                    buyerId: id,
                     changedBy: session.user.id,
                     diff: { action: 'deleted', buyerName: existingBuyer.fullName }
                 }
@@ -203,7 +222,7 @@ export async function DELETE(
 
             // Delete buyer (this will cascade delete history due to schema)
             await tx.buyer.delete({
-                where: { id: params.id }
+                where: { id }
             })
         })
 

@@ -90,8 +90,8 @@ export function BuyerDetails({ buyer, currentUserId }: BuyerDetailsProps) {
                 notes: buyer.notes || undefined,
                 status: newStatus as any,
                 id: buyer.id,
-                updatedAt: new Date().toISOString(),
-                tags: JSON.stringify(buyer.tags)
+                updatedAt: buyer.updatedAt instanceof Date ? buyer.updatedAt.toISOString() : buyer.updatedAt,
+                tags: Array.isArray(buyer.tags) ? JSON.stringify(buyer.tags) : buyer.tags
             }
             await BuyersAPI.updateBuyer(buyer.id, updatePayload)
             window.location.reload() // Simple refresh
@@ -288,18 +288,23 @@ export function BuyerDetails({ buyer, currentUserId }: BuyerDetailsProps) {
                     </div>
 
                     {/* Tags */}
-                    {buyer.tags.length > 0 && (
-                        <div className="bg-white shadow-sm rounded-lg p-6">
-                            <h3 className="text-lg font-medium text-gray-900 mb-4">Tags</h3>
-                            <div className="flex flex-wrap gap-2">
-                                {buyer.tags.map((tag, index) => (
-                                    <Badge key={index} variant="secondary" className="text-xs">
-                                        {tag}
-                                    </Badge>
-                                ))}
+                    {(() => {
+                        const tags = Array.isArray(buyer.tags)
+                            ? buyer.tags
+                            : JSON.parse(buyer.tags || '[]')
+                        return tags.length > 0 && (
+                            <div className="bg-white shadow-sm rounded-lg p-6">
+                                <h3 className="text-lg font-medium text-gray-900 mb-4">Tags</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {tags.map((tag: string, index: number) => (
+                                        <Badge key={index} variant="secondary" className="text-xs">
+                                            {tag}
+                                        </Badge>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )
+                    })()}
 
                     {/* Recent Activity */}
                     {buyer.history.length > 0 && (

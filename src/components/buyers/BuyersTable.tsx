@@ -171,15 +171,20 @@ export function BuyersTable({ buyers, currentUserId }: BuyersTableProps) {
 
                             <TableCell>
                                 <div className="flex flex-wrap gap-1">
-                                    {buyer.tags.length > 0 ? (
-                                        buyer.tags.map((tag) => (
-                                            <Badge key={tag} variant="secondary" className="text-xs">
-                                                {tag}
-                                            </Badge>
-                                        ))
-                                    ) : (
-                                        <span className="text-sm text-gray-400">No tags</span>
-                                    )}
+                                    {(() => {
+                                        const tags = Array.isArray(buyer.tags)
+                                            ? buyer.tags
+                                            : JSON.parse(buyer.tags || '[]')
+                                        return tags.length > 0 ? (
+                                            tags.map((tag: string) => (
+                                                <Badge key={tag} variant="secondary" className="text-xs">
+                                                    {tag}
+                                                </Badge>
+                                            ))
+                                        ) : (
+                                            <span className="text-sm text-gray-400">No tags</span>
+                                        )
+                                    })()}
                                 </div>
                             </TableCell>
 
