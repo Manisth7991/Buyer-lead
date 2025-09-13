@@ -34,10 +34,12 @@ type BuyerWithHistory = {
     }
     history: Array<{
         id: string
-        action: string
-        details?: string | null
-        createdAt: Date
-        changedBy: {
+        diff: {
+            action: string
+            [key: string]: any
+        }
+        changedAt: Date
+        changedByUser: {
             id: string
             name?: string | null
             email?: string | null
@@ -306,12 +308,12 @@ export function BuyerDetails({ buyer, currentUserId }: BuyerDetailsProps) {
                             <div className="space-y-3">
                                 {buyer.history.slice(0, 5).map((event) => (
                                     <div key={event.id} className="text-sm">
-                                        <p className="font-medium text-gray-900">{event.action}</p>
+                                        <p className="font-medium text-gray-900">{event.diff.action}</p>
                                         <p className="text-gray-500">
-                                            by {event.changedBy.name} • {new Date(event.createdAt).toLocaleDateString()}
+                                            by {event.changedByUser.name} • {new Date(event.changedAt).toLocaleDateString()}
                                         </p>
-                                        {event.details && (
-                                            <p className="text-gray-600 mt-1">{event.details}</p>
+                                        {event.diff.details && (
+                                            <p className="text-gray-600 mt-1">{event.diff.details}</p>
                                         )}
                                     </div>
                                 ))}

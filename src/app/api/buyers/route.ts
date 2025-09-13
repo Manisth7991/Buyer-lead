@@ -97,17 +97,15 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json()
+        console.log('Received body:', body)
         const validatedData = CreateBuyerSchema.parse(body)
-
-        // Convert tags array to JSON string
-        const tagsJson = JSON.stringify(validatedData.tags || [])
+        console.log('Validated data:', validatedData)
 
         const buyer = await prisma.$transaction(async (tx: any) => {
             // Create the buyer
             const newBuyer = await tx.buyer.create({
                 data: {
                     ...validatedData,
-                    tags: tagsJson,
                     ownerId: session.user.id,
                 },
                 include: {

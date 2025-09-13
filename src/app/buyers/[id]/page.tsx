@@ -26,10 +26,10 @@ export default async function BuyerDetailPage({ params }: BuyerDetailPageProps) 
                 select: { id: true, name: true, email: true }
             },
             history: {
-                orderBy: { createdAt: 'desc' },
+                orderBy: { changedAt: 'desc' },
                 take: 10,
                 include: {
-                    changedBy: {
+                    changedByUser: {
                         select: { id: true, name: true, email: true }
                     }
                 }

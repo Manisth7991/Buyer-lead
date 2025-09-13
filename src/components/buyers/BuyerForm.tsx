@@ -45,6 +45,11 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
     }
     if (!formData.phone.trim()) {
       newErrors.phone = 'Phone number is required'
+    } else if (!/^\d{10,15}$/.test(formData.phone)) {
+      newErrors.phone = 'Phone must be 10-15 digits'
+    }
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Invalid email format'
     }
     if (!formData.city) {
       newErrors.city = 'City is required'
@@ -55,6 +60,13 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
     if (['APARTMENT', 'VILLA'].includes(formData.propertyType) && !formData.bhk) {
       newErrors.bhk = 'BHK is required for apartments and villas'
     }
+    if (formData.budgetMin && formData.budgetMax) {
+      const min = parseInt(formData.budgetMin)
+      const max = parseInt(formData.budgetMax)
+      if (max < min) {
+        newErrors.budgetMax = 'Maximum budget must be greater than or equal to minimum budget'
+      }
+    }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
@@ -62,7 +74,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!validateForm()) {
       return
     }
@@ -161,7 +173,11 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                 onChange={(e) => handleInputChange('email', e.target.value)}
                 type="email"
                 placeholder="Enter email address"
+                className={errors.email ? 'border-red-500' : ''}
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              )}
             </div>
 
             <div>
@@ -230,11 +246,11 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                   className={errors.bhk ? 'border-red-500' : ''}
                 >
                   <option value="">Select BHK</option>
-                  <option value="ONE_BHK">1 BHK</option>
-                  <option value="TWO_BHK">2 BHK</option>
-                  <option value="THREE_BHK">3 BHK</option>
-                  <option value="FOUR_BHK">4 BHK</option>
-                  <option value="FIVE_PLUS_BHK">5+ BHK</option>
+                  <option value="STUDIO">Studio</option>
+                  <option value="ONE">1 BHK</option>
+                  <option value="TWO">2 BHK</option>
+                  <option value="THREE">3 BHK</option>
+                  <option value="FOUR">4 BHK</option>
                 </Select>
                 {errors.bhk && (
                   <p className="mt-1 text-sm text-red-600">{errors.bhk}</p>
@@ -297,7 +313,11 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                 onChange={(e) => handleInputChange('budgetMax', e.target.value)}
                 type="number"
                 placeholder="Enter maximum budget"
+                className={errors.budgetMax ? 'border-red-500' : ''}
               />
+              {errors.budgetMax && (
+                <p className="mt-1 text-sm text-red-600">{errors.budgetMax}</p>
+              )}
             </div>
           </div>
         </div>
@@ -305,7 +325,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
         {/* Additional Information */}
         <div>
           <h3 className="text-lg font-medium text-gray-900 mb-4">Additional Information</h3>
-          
+
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Source *
@@ -388,8 +408,8 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting 
-              ? (mode === 'create' ? 'Creating...' : 'Updating...') 
+            {isSubmitting
+              ? (mode === 'create' ? 'Creating...' : 'Updating...')
               : (mode === 'create' ? 'Create Lead' : 'Update Lead')
             }
           </Button>

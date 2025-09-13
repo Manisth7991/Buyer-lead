@@ -25,8 +25,9 @@ A comprehensive Next.js application for managing buyer leads in a real estate co
 - User registration and login
 
 ### Default User Account
-- **Email**: `admin@example.com`
-- **Password**: `admin123`
+- **Demo Login**: Any email ending with `@demo.com`
+- **Example**: `admin@demo.com` or `user@demo.com`
+- **Note**: No password required for demo mode
 
 ## Core Application Features
 
