@@ -172,10 +172,10 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
           transition={{ delay: 0.1 }}
           className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
         >
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+          <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                <UserIcon className="w-5 h-5 text-blue-600" />
+              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                <UserIcon className="w-5 h-5 text-gray-600" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Personal Information</h3>
@@ -197,7 +197,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                   value={formData.fullName}
                   onChange={(e) => handleInputChange('fullName', e.target.value)}
                   placeholder="Enter full name"
-                  className={`transition-all duration-200 ${errors.fullName ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`}
+                  className={`${errors.fullName ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
                 />
                 {errors.fullName && (
                   <motion.p
@@ -222,7 +222,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
                   placeholder="Enter phone number"
-                  className={`transition-all duration-200 ${errors.phone ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`}
+                  className={`${errors.phone ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : ''}`}
                 />
                 {errors.phone && (
                   <motion.p
@@ -303,10 +303,10 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
           transition={{ delay: 0.2 }}
           className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
         >
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-4 border-b border-gray-200">
+          <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                <HomeIcon className="w-5 h-5 text-green-600" />
+              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                <HomeIcon className="w-5 h-5 text-gray-600" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Property Requirements</h3>
@@ -438,10 +438,10 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
           transition={{ delay: 0.3 }}
           className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
         >
-          <div className="bg-gradient-to-r from-purple-50 to-violet-50 px-6 py-4 border-b border-gray-200">
+          <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                <CurrencyDollarIcon className="w-5 h-5 text-purple-600" />
+              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                <CurrencyDollarIcon className="w-5 h-5 text-gray-600" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Budget Information</h3>
@@ -504,10 +504,10 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
           transition={{ delay: 0.4 }}
           className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
         >
-          <div className="bg-gradient-to-r from-orange-50 to-amber-50 px-6 py-4 border-b border-gray-200">
+          <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                <DocumentTextIcon className="w-5 h-5 text-orange-600" />
+              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                <DocumentTextIcon className="w-5 h-5 text-gray-600" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Additional Information</h3>
@@ -712,7 +712,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className={`bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition-all duration-200 hover:shadow-xl ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {isSubmitting ? (
                 <div className="flex items-center space-x-2">

@@ -55,6 +55,54 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Input and form elements styling */
+input,
+textarea,
+select {
+  color: var(--foreground) !important;
+  background: var(--background);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted-foreground) !important;
+  opacity: 0.7;
+}
+
+/* Ensure good contrast for input text */
+.light input,
+.light textarea,
+.light select {
+  color: #1f2937 !important;
+  background: #ffffff !important;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  color: #f9fafb !important;
+  background: #1f2937 !important;
+}
+
+/* Option elements for selects */
+.light option {
+  color: #1f2937 !important;
+  background: #ffffff !important;
+}
+
+.dark option {
+  color: #f9fafb !important;
+  background: #1f2937 !important;
+}
+
+/* Input focus states */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+
 /* Global cursor pointer styles for interactive elements */
 button,
 a,

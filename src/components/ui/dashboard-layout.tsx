@@ -1,6 +1,7 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Sidebar } from './sidebar'
 import { TopNavbar } from './navbar'
 import { useSession } from 'next-auth/react'
@@ -11,10 +12,11 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
     const { data: session, status } = useSession()
+    const [sidebarOpen, setSidebarOpen] = useState(false)
 
     if (status === 'loading') {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
                 <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
@@ -29,21 +31,42 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <Sidebar />
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+            {/* Mobile sidebar */}
+            <AnimatePresence>
+                {sidebarOpen && (
+                    <>
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setSidebarOpen(false)}
+                            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
+                        />
+                        {/* Mobile sidebar */}
+                        <div className="lg:hidden">
+                            <Sidebar onClose={() => setSidebarOpen(false)} />
+                        </div>
+                    </>
+                )}
+            </AnimatePresence>
 
-            <div className="pl-72">
-                <TopNavbar />
+            {/* Desktop sidebar */}
+            <div className="hidden lg:block">
+                <Sidebar />
+            </div>
+
+            <div className="lg:pl-72">
+                <TopNavbar onMenuClick={() => setSidebarOpen(true)} />
 
                 <motion.main
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="py-8 px-6"
+                    className="p-0"
                 >
-                    <div className="max-w-7xl mx-auto">
-                        {children}
-                    </div>
+                    {children}
                 </motion.main>
             </div>
         </div>

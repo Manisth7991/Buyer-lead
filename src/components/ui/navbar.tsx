@@ -13,10 +13,15 @@ import {
     Cog6ToothIcon,
     ArrowRightOnRectangleIcon,
     PhoneIcon,
-    MapPinIcon
+    MapPinIcon,
+    Bars3Icon
 } from '@heroicons/react/24/outline'
 
-export function TopNavbar() {
+interface TopNavbarProps {
+    onMenuClick?: () => void
+}
+
+export function TopNavbar({ onMenuClick }: TopNavbarProps) {
     const { data: session } = useSession()
     const router = useRouter()
     const [showUserMenu, setShowUserMenu] = useState(false)
@@ -65,9 +70,19 @@ export function TopNavbar() {
             transition={{ duration: 0.3 }}
             className="bg-white border-b border-gray-200 shadow-sm"
         >
-            <div className="flex h-16 items-center justify-between px-6">
-                {/* Left side - Search */}
+            <div className="flex h-16 items-center justify-between px-4 sm:px-6">
+                {/* Left side - Mobile menu + Search */}
                 <div className="flex items-center flex-1 max-w-md">
+                    {/* Mobile menu button */}
+                    {onMenuClick && (
+                        <button
+                            onClick={onMenuClick}
+                            className="lg:hidden mr-4 p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700 transition-colors"
+                        >
+                            <Bars3Icon className="w-6 h-6" />
+                        </button>
+                    )}
+
                     <div className="relative w-full" ref={searchRef}>
                         <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
@@ -75,7 +90,7 @@ export function TopNavbar() {
                             value={searchQuery}
                             onChange={handleSearchChange}
                             placeholder="Search buyers, leads, or properties..."
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white text-gray-900 placeholder-gray-500 shadow-sm"
                         />
 
                         {/* Search Results Dropdown */}

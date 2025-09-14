@@ -101,17 +101,17 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
             animate={{ opacity: 1, y: 0 }}
             className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
         >
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+            <div className="bg-gray-50 px-6 py-4 border-b border-gray-200">
                 <div className="flex items-center space-x-2">
-                    <FunnelIcon className="w-5 h-5 text-blue-600" />
+                    <FunnelIcon className="w-5 h-5 text-gray-600" />
                     <h3 className="text-lg font-semibold text-gray-900">Filter Leads</h3>
                 </div>
             </div>
 
-            <div className="p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
-                    {/* Search */}
-                    <div className="lg:col-span-2">
+            <div className="p-4 sm:p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6">
+                    {/* Search - Full width on mobile, 2 cols on larger screens */}
+                    <div className="sm:col-span-2 xl:col-span-2">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             <div className="flex items-center space-x-2">
                                 <MagnifyingGlassIcon className="w-4 h-4" />
@@ -124,14 +124,14 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                                 placeholder="Search by name, phone, or email..."
                                 value={searchValue}
                                 onChange={(e) => handleSearchChange(e.target.value)}
-                                className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                                className="pl-10"
                             />
                             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                         </div>
                     </div>
 
                     {/* City Filter */}
-                    <div>
+                    <div className="sm:col-span-1">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             <div className="flex items-center space-x-2">
                                 <MapPinIcon className="w-4 h-4" />
@@ -141,7 +141,6 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                         <Select
                             value={filters.city || ''}
                             onChange={(e) => handleFilterChange('city', e.target.value)}
-                            className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
                         >
                             <option value="">All Cities</option>
                             <option value="CHANDIGARH">Chandigarh</option>
@@ -153,7 +152,7 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                     </div>
 
                     {/* Property Type Filter */}
-                    <div>
+                    <div className="sm:col-span-1">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             <div className="flex items-center space-x-2">
                                 <HomeIcon className="w-4 h-4" />
@@ -163,7 +162,6 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                         <Select
                             value={filters.propertyType || ''}
                             onChange={(e) => handleFilterChange('propertyType', e.target.value)}
-                            className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
                         >
                             <option value="">All Types</option>
                             <option value="APARTMENT">Apartment</option>
@@ -175,7 +173,7 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                     </div>
 
                     {/* Status Filter */}
-                    <div>
+                    <div className="sm:col-span-1">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             <div className="flex items-center space-x-2">
                                 <CheckCircleIcon className="w-4 h-4" />
@@ -185,7 +183,6 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                         <Select
                             value={filters.status || ''}
                             onChange={(e) => handleFilterChange('status', e.target.value)}
-                            className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
                         >
                             <option value="">All Statuses</option>
                             <option value="NEW">New</option>
@@ -199,7 +196,7 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                     </div>
 
                     {/* Timeline Filter */}
-                    <div>
+                    <div className="sm:col-span-1">
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                             <div className="flex items-center space-x-2">
                                 <ClockIcon className="w-4 h-4" />
@@ -209,7 +206,6 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                         <Select
                             value={filters.timeline || ''}
                             onChange={(e) => handleFilterChange('timeline', e.target.value)}
-                            className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
                         >
                             <option value="">All Timelines</option>
                             <option value="ZERO_TO_THREE_MONTHS">0-3 Months</option>
@@ -220,15 +216,16 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                     </div>
                 </div>
 
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                {/* Sort and Clear Section - Mobile Responsive */}
+                <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-200">
+                    <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:flex lg:items-center lg:space-x-6">
                             <div className="flex items-center space-x-2">
-                                <label className="text-sm font-medium text-gray-700">Sort by:</label>
+                                <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Sort by:</label>
                                 <Select
                                     value={filters.sortBy}
                                     onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                                    className="min-w-0 flex-1"
                                 >
                                     <option value="updatedAt">Last Updated</option>
                                     <option value="createdAt">Created Date</option>
@@ -237,11 +234,11 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                             </div>
 
                             <div className="flex items-center space-x-2">
-                                <label className="text-sm font-medium text-gray-700">Order:</label>
+                                <label className="text-sm font-medium text-gray-700 whitespace-nowrap">Order:</label>
                                 <Select
                                     value={filters.sortOrder}
                                     onChange={(e) => handleFilterChange('sortOrder', e.target.value)}
-                                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                                    className="min-w-0 flex-1"
                                 >
                                     <option value="desc">Newest First</option>
                                     <option value="asc">Oldest First</option>
@@ -252,7 +249,7 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                         <Button
                             variant="outline"
                             onClick={handleClearFilters}
-                            className="border-gray-300 hover:border-red-400 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+                            className="w-full sm:w-auto border-gray-300 hover:border-red-400 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
                         >
                             <XMarkIcon className="w-4 h-4 mr-2" />
                             Clear All Filters

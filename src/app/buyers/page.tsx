@@ -94,26 +94,29 @@ export default async function BuyersPage({ searchParams }: BuyersPageProps) {
             </div>
             <div className="mt-6 sm:mt-0 sm:ml-16 sm:flex-none">
               <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/buyers/new">
-                  <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition-all duration-200 hover:shadow-xl">
+                <Link href="/buyers/new" className="w-full sm:w-auto">
+                  <Button className="w-full">
                     <PlusIcon className="w-5 h-5 mr-2" />
                     Add New Lead
                   </Button>
                 </Link>
-                <div className="flex gap-2">
-                  <Link href="/buyers/import">
-                    <Button variant="outline" className="flex-1 sm:flex-none border-gray-300 hover:border-gray-400 shadow-sm transition-all duration-200">
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <Link href="/buyers/import" className="flex-1 sm:flex-none">
+                    <Button variant="outline" className="w-full">
                       <DocumentArrowUpIcon className="w-5 h-5 mr-2" />
-                      Import CSV
+                      <span className="hidden sm:inline">Import CSV</span>
+                      <span className="sm:hidden">Import</span>
                     </Button>
                   </Link>
                   <a
                     href={`/api/buyers/export?${new URLSearchParams(queryParams).toString()}`}
                     download
+                    className="flex-1 sm:flex-none"
                   >
-                    <Button variant="outline" className="flex-1 sm:flex-none border-gray-300 hover:border-gray-400 shadow-sm transition-all duration-200">
+                    <Button variant="outline" className="w-full">
                       <DocumentArrowDownIcon className="w-5 h-5 mr-2" />
-                      Export CSV
+                      <span className="hidden sm:inline">Export CSV</span>
+                      <span className="sm:hidden">Export</span>
                     </Button>
                   </a>
                 </div>
