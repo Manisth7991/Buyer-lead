@@ -5,18 +5,56 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+/* Global cursor pointer styles for interactive elements */
+button,
+a,
+[role="button"],
+[onclick],
+label,
+select,
+.clickable {
+  cursor: pointer;
+}
+
+/* Specific interactive elements */
+input[type="checkbox"],
+input[type="radio"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+  cursor: pointer;
+}
+
+/* Disabled elements should have default cursor */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[disabled] {
+  cursor: not-allowed;
+}
+
+/* Link-like text elements */
+.link,
+.text-link {
+  cursor: pointer;
+}
+
+/* Hover effects for better UX */
+.hover-pointer:hover {
+  cursor: pointer;
 }
 
 body {

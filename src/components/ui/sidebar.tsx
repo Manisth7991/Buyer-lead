@@ -55,7 +55,7 @@ export function Sidebar() {
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                         className={`
-                      group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200
+                      cursor-pointer group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200
                       ${isActive
                                                 ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-700 border border-blue-200'
                                                 : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'

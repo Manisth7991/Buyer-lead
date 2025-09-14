@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSession, signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
 import { useSearch } from '@/hooks/useSearch'
 import {
@@ -17,6 +18,7 @@ import {
 
 export function TopNavbar() {
     const { data: session } = useSession()
+    const router = useRouter()
     const [showUserMenu, setShowUserMenu] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
     const [showSearchResults, setShowSearchResults] = useState(false)
@@ -194,11 +196,23 @@ export function TopNavbar() {
                                 </div>
 
                                 <div className="py-1">
-                                    <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+                                    <button
+                                        onClick={() => {
+                                            router.push('/profile')
+                                            setShowUserMenu(false)
+                                        }}
+                                        className="cursor-pointer flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                    >
                                         <UserCircleIcon className="w-4 h-4 mr-3" />
                                         Your Profile
                                     </button>
-                                    <button className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200">
+                                    <button
+                                        onClick={() => {
+                                            router.push('/settings')
+                                            setShowUserMenu(false)
+                                        }}
+                                        className="cursor-pointer flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                                    >
                                         <Cog6ToothIcon className="w-4 h-4 mr-3" />
                                         Settings
                                     </button>
@@ -207,7 +221,7 @@ export function TopNavbar() {
                                 <div className="border-t border-gray-100 py-1">
                                     <button
                                         onClick={() => signOut()}
-                                        className="flex items-center w-full px-4 py-2 text-sm text-red-700 hover:bg-red-50 transition-colors duration-200"
+                                        className="cursor-pointer flex items-center w-full px-4 py-2 text-sm text-red-700 hover:bg-red-50 transition-colors duration-200"
                                     >
                                         <ArrowRightOnRectangleIcon className="w-4 h-4 mr-3" />
                                         Sign out
