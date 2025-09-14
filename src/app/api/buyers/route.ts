@@ -20,12 +20,12 @@ export async function GET(request: NextRequest) {
 
         const where: any = {}
 
-        // Search across name, phone, and email
+        // Search across name, phone, and email (SQLite compatible)
         if (validatedParams.search) {
             where.OR = [
-                { fullName: { contains: validatedParams.search, mode: 'insensitive' } },
+                { fullName: { contains: validatedParams.search } },
                 { phone: { contains: validatedParams.search } },
-                { email: { contains: validatedParams.search, mode: 'insensitive' } },
+                { email: { contains: validatedParams.search } },
             ]
         }
 
