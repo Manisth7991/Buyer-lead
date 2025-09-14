@@ -76,21 +76,20 @@ export function BuyersTable({ buyers, currentUserId }: BuyersTableProps) {
             case 'NEW': return 'bg-blue-50 text-blue-700 border-blue-200'
             case 'CONTACTED': return 'bg-yellow-50 text-yellow-700 border-yellow-200'
             case 'QUALIFIED': return 'bg-emerald-50 text-emerald-700 border-emerald-200'
-            case 'VIEWING': return 'bg-purple-50 text-purple-700 border-purple-200'
-            case 'NEGOTIATING': return 'bg-orange-50 text-orange-700 border-orange-200'
-            case 'CLOSED': return 'bg-green-50 text-green-700 border-green-200'
-            case 'LOST': return 'bg-red-50 text-red-700 border-red-200'
+            case 'VISITED': return 'bg-purple-50 text-purple-700 border-purple-200'
+            case 'NEGOTIATION': return 'bg-orange-50 text-orange-700 border-orange-200'
+            case 'CONVERTED': return 'bg-green-50 text-green-700 border-green-200'
+            case 'DROPPED': return 'bg-red-50 text-red-700 border-red-200'
             default: return 'bg-gray-50 text-gray-700 border-gray-200'
         }
     }
 
     const getTimelineColor = (timeline: string) => {
         switch (timeline) {
-            case 'IMMEDIATE': return 'bg-red-50 text-red-700 border-red-200'
-            case 'WITHIN_MONTH': return 'bg-orange-50 text-orange-700 border-orange-200'
-            case 'WITHIN_3_MONTHS': return 'bg-yellow-50 text-yellow-700 border-yellow-200'
-            case 'WITHIN_6_MONTHS': return 'bg-blue-50 text-blue-700 border-blue-200'
-            case 'NO_RUSH': return 'bg-gray-50 text-gray-700 border-gray-200'
+            case 'ZERO_TO_THREE_MONTHS': return 'bg-red-50 text-red-700 border-red-200'
+            case 'THREE_TO_SIX_MONTHS': return 'bg-orange-50 text-orange-700 border-orange-200'
+            case 'MORE_THAN_SIX_MONTHS': return 'bg-yellow-50 text-yellow-700 border-yellow-200'
+            case 'EXPLORING': return 'bg-blue-50 text-blue-700 border-blue-200'
             default: return 'bg-gray-50 text-gray-700 border-gray-200'
         }
     }

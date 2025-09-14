@@ -146,7 +146,7 @@ export default async function BuyersPage({ searchParams }: BuyersPageProps) {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Active Leads</p>
-                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: any) => ['NEW', 'CONTACTED', 'QUALIFIED', 'VIEWING', 'NEGOTIATING'].includes(b.status)).length}</p>
+                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: any) => ['NEW', 'CONTACTED', 'QUALIFIED', 'VISITED', 'NEGOTIATION'].includes(b.status)).length}</p>
               </div>
             </div>
           </div>
@@ -159,7 +159,7 @@ export default async function BuyersPage({ searchParams }: BuyersPageProps) {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Closed</p>
-                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: any) => b.status === 'CLOSED').length}</p>
+                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: any) => b.status === 'CONVERTED').length}</p>
               </div>
             </div>
           </div>

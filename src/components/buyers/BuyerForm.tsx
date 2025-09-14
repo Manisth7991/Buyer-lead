@@ -45,6 +45,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
     budgetMin: initialData?.budgetMin || '',
     budgetMax: initialData?.budgetMax || '',
     notes: initialData?.notes || '',
+    updatedAt: initialData?.updatedAt || new Date().toISOString(), // Include updatedAt for concurrency control
   })
   const [tags, setTags] = useState<string[]>(
     initialData?.tags ? JSON.parse(initialData.tags) : []
@@ -110,8 +111,9 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
         const updatePayload = {
           ...payload,
           id: buyerId,
-          status: 'NEW' as const,
-          updatedAt: new Date().toISOString(),
+          status: initialData?.status || 'NEW',
+          updatedAt: formData.updatedAt, // Use original updatedAt for concurrency control
+          tags: JSON.stringify(tags), // Convert tags array to JSON string for API
         }
         await BuyersAPI.updateBuyer(buyerId, updatePayload)
         router.push(`/buyers/${buyerId}`)

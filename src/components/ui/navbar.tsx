@@ -1,20 +1,60 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useSession, signOut } from 'next-auth/react'
+import { useState, useRef, useEffect } from 'react'
+import { useSearch } from '@/hooks/useSearch'
 import {
     BellIcon,
     MagnifyingGlassIcon,
     ChevronDownIcon,
     UserCircleIcon,
     Cog6ToothIcon,
-    ArrowRightOnRectangleIcon
+    ArrowRightOnRectangleIcon,
+    PhoneIcon,
+    MapPinIcon
 } from '@heroicons/react/24/outline'
-import { useState } from 'react'
 
 export function TopNavbar() {
     const { data: session } = useSession()
     const [showUserMenu, setShowUserMenu] = useState(false)
+    const [searchQuery, setSearchQuery] = useState('')
+    const [showSearchResults, setShowSearchResults] = useState(false)
+    const { search, isSearching, searchResults, navigateToResult, clearResults } = useSearch()
+    const searchRef = useRef<HTMLDivElement>(null)
+
+    // Handle search input
+    const handleSearchChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        setSearchQuery(value)
+
+        if (value.trim()) {
+            await search(value)
+            setShowSearchResults(true)
+        } else {
+            clearResults()
+            setShowSearchResults(false)
+        }
+    }
+
+    // Handle clicking outside search to close results
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                setShowSearchResults(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handleClickOutside)
+        return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [])
+
+    // Handle selecting a search result
+    const handleSelectResult = (result: any) => {
+        navigateToResult(result)
+        setSearchQuery('')
+        setShowSearchResults(false)
+    }
 
     return (
         <motion.header
@@ -26,13 +66,81 @@ export function TopNavbar() {
             <div className="flex h-16 items-center justify-between px-6">
                 {/* Left side - Search */}
                 <div className="flex items-center flex-1 max-w-md">
-                    <div className="relative w-full">
+                    <div className="relative w-full" ref={searchRef}>
                         <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                         <input
                             type="text"
+                            value={searchQuery}
+                            onChange={handleSearchChange}
                             placeholder="Search buyers, leads, or properties..."
                             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                         />
+
+                        {/* Search Results Dropdown */}
+                        <AnimatePresence>
+                            {showSearchResults && searchResults.length > 0 && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                                    exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 py-2 z-50 max-h-96 overflow-y-auto"
+                                >
+                                    {searchResults.map((result: any) => (
+                                        <button
+                                            key={result.id}
+                                            onClick={() => handleSelectResult(result)}
+                                            className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100 last:border-b-0"
+                                        >
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                                    <span className="text-blue-600 font-semibold text-sm">
+                                                        {result.title.charAt(0).toUpperCase()}
+                                                    </span>
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-medium text-gray-900 truncate">
+                                                        {result.title}
+                                                    </p>
+                                                    <div className="flex items-center space-x-4 mt-1">
+                                                        <div className="flex items-center space-x-1">
+                                                            <PhoneIcon className="w-3 h-3 text-gray-400" />
+                                                            <span className="text-xs text-gray-500">{result.phone}</span>
+                                                        </div>
+                                                        <div className="flex items-center space-x-1">
+                                                            <MapPinIcon className="w-3 h-3 text-gray-400" />
+                                                            <span className="text-xs text-gray-500">{result.city}</span>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-xs text-gray-400 mt-1">{result.description}</p>
+                                                </div>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        {/* Loading indicator */}
+                        {isSearching && (
+                            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                                <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+                            </div>
+                        )}
+
+                        {/* No results message */}
+                        {showSearchResults && searchQuery && !isSearching && searchResults.length === 0 && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 py-4 z-50"
+                            >
+                                <div className="text-center text-gray-500 text-sm">
+                                    No results found for "{searchQuery}"
+                                </div>
+                            </motion.div>
+                        )}
                     </div>
                 </div>
 
