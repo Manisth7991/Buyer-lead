@@ -8,10 +8,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { 
-  UserIcon, 
-  PhoneIcon, 
-  EnvelopeIcon, 
+import {
+  UserIcon,
+  PhoneIcon,
+  EnvelopeIcon,
   MapPinIcon,
   HomeIcon,
   CurrencyDollarIcon,
@@ -143,14 +143,14 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
   }
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="max-w-4xl mx-auto space-y-8"
     >
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Personal Information Card */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
@@ -167,7 +167,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
               </div>
             </div>
           </div>
-          
+
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -184,7 +184,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                   className={`transition-all duration-200 ${errors.fullName ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`}
                 />
                 {errors.fullName && (
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-2 text-sm text-red-600 flex items-center space-x-1"
@@ -209,7 +209,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                   className={`transition-all duration-200 ${errors.phone ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`}
                 />
                 {errors.phone && (
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-2 text-sm text-red-600 flex items-center space-x-1"
@@ -235,7 +235,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                   className={`transition-all duration-200 ${errors.email ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`}
                 />
                 {errors.email && (
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-2 text-sm text-red-600 flex items-center space-x-1"
@@ -266,7 +266,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                   <option value="OTHER">Other</option>
                 </Select>
                 {errors.city && (
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-2 text-sm text-red-600 flex items-center space-x-1"
@@ -281,7 +281,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
         </motion.div>
 
         {/* Property Requirements Card */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
@@ -298,7 +298,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
               </div>
             </div>
           </div>
-          
+
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -327,7 +327,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                   <option value="RETAIL">Retail</option>
                 </Select>
                 {errors.propertyType && (
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-2 text-sm text-red-600 flex items-center space-x-1"
@@ -364,7 +364,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                     <option value="FOUR">4 BHK</option>
                   </Select>
                   {errors.bhk && (
-                    <motion.p 
+                    <motion.p
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-2 text-sm text-red-600 flex items-center space-x-1"
@@ -416,7 +416,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
         </motion.div>
 
         {/* Budget Information Card */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
@@ -433,7 +433,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
               </div>
             </div>
           </div>
-          
+
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -467,7 +467,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                   className={`transition-all duration-200 ${errors.budgetMax ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500'}`}
                 />
                 {errors.budgetMax && (
-                  <motion.p 
+                  <motion.p
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-2 text-sm text-red-600 flex items-center space-x-1"
@@ -482,7 +482,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
         </motion.div>
 
         {/* Additional Information Card */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
@@ -499,7 +499,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
               </div>
             </div>
           </div>
-          
+
           <div className="p-6 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -557,9 +557,9 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                     }
                   }}
                 />
-                <Button 
-                  type="button" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={handleAddTag}
                   className="border-gray-300 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
                 >
@@ -568,7 +568,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
                 </Button>
               </div>
               {tags.length > 0 && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="flex flex-wrap gap-2"
@@ -598,7 +598,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
         </motion.div>
 
         {/* Form Actions */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}

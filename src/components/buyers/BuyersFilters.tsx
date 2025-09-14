@@ -7,14 +7,14 @@ import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { BuyerFilter } from '@/lib/validations/buyer'
-import { 
-  MagnifyingGlassIcon, 
-  FunnelIcon, 
-  XMarkIcon,
-  MapPinIcon,
-  HomeIcon,
-  CheckCircleIcon,
-  ClockIcon
+import {
+    MagnifyingGlassIcon,
+    FunnelIcon,
+    XMarkIcon,
+    MapPinIcon,
+    HomeIcon,
+    CheckCircleIcon,
+    ClockIcon
 } from '@heroicons/react/24/outline'
 
 interface BuyersFiltersProps {
@@ -96,7 +96,7 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
     }
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
@@ -107,7 +107,7 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
                     <h3 className="text-lg font-semibold text-gray-900">Filter Leads</h3>
                 </div>
             </div>
-            
+
             <div className="p-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
                     {/* Search */}

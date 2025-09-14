@@ -8,17 +8,17 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge'
 import { BuyersAPI } from '@/lib/api/buyers'
 import { formatCurrency } from '@/lib/utils'
-import { 
-  EyeIcon, 
-  PencilIcon, 
-  TrashIcon, 
-  PhoneIcon, 
-  EnvelopeIcon,
-  MapPinIcon,
-  HomeIcon,
-  CalendarIcon,
-  CurrencyDollarIcon,
-  TagIcon
+import {
+    EyeIcon,
+    PencilIcon,
+    TrashIcon,
+    PhoneIcon,
+    EnvelopeIcon,
+    MapPinIcon,
+    HomeIcon,
+    CalendarIcon,
+    CurrencyDollarIcon,
+    TagIcon
 } from '@heroicons/react/24/outline'
 
 type BuyerWithOwner = {
@@ -97,7 +97,7 @@ export function BuyersTable({ buyers, currentUserId }: BuyersTableProps) {
 
     if (buyers.length === 0) {
         return (
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center"
@@ -120,7 +120,7 @@ export function BuyersTable({ buyers, currentUserId }: BuyersTableProps) {
     }
 
     return (
-        <motion.div 
+        <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
@@ -271,8 +271,8 @@ export function BuyersTable({ buyers, currentUserId }: BuyersTableProps) {
                                     <TableCell className="py-4">
                                         <div className="flex items-center space-x-2">
                                             <Link href={`/buyers/${buyer.id}`}>
-                                                <Button 
-                                                    variant="outline" 
+                                                <Button
+                                                    variant="outline"
                                                     size="sm"
                                                     className="border-gray-300 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
                                                 >
@@ -283,8 +283,8 @@ export function BuyersTable({ buyers, currentUserId }: BuyersTableProps) {
                                             {buyer.ownerId === currentUserId && (
                                                 <>
                                                     <Link href={`/buyers/${buyer.id}/edit`}>
-                                                        <Button 
-                                                            variant="outline" 
+                                                        <Button
+                                                            variant="outline"
                                                             size="sm"
                                                             className="border-gray-300 hover:border-green-400 hover:bg-green-50 hover:text-green-600 transition-all duration-200"
                                                         >
