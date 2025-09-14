@@ -2,10 +2,20 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { motion } from 'framer-motion'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { BuyerFilter } from '@/lib/validations/buyer'
+import { 
+  MagnifyingGlassIcon, 
+  FunnelIcon, 
+  XMarkIcon,
+  MapPinIcon,
+  HomeIcon,
+  CheckCircleIcon,
+  ClockIcon
+} from '@heroicons/react/24/outline'
 
 interface BuyersFiltersProps {
     initialFilters: BuyerFilter
@@ -86,129 +96,170 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
     }
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-sm border">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-                {/* Search */}
-                <div className="lg:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Search
-                    </label>
-                    <Input
-                        type="text"
-                        placeholder="Search by name, phone, or email..."
-                        value={searchValue}
-                        onChange={(e) => handleSearchChange(e.target.value)}
-                    />
-                </div>
-
-                {/* City Filter */}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        City
-                    </label>
-                    <Select
-                        value={filters.city || ''}
-                        onChange={(e) => handleFilterChange('city', e.target.value)}
-                    >
-                        <option value="">All Cities</option>
-                        <option value="CHANDIGARH">Chandigarh</option>
-                        <option value="MOHALI">Mohali</option>
-                        <option value="ZIRAKPUR">Zirakpur</option>
-                        <option value="PANCHKULA">Panchkula</option>
-                        <option value="OTHER">Other</option>
-                    </Select>
-                </div>
-
-                {/* Property Type Filter */}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Property Type
-                    </label>
-                    <Select
-                        value={filters.propertyType || ''}
-                        onChange={(e) => handleFilterChange('propertyType', e.target.value)}
-                    >
-                        <option value="">All Types</option>
-                        <option value="APARTMENT">Apartment</option>
-                        <option value="VILLA">Villa</option>
-                        <option value="PLOT">Plot</option>
-                        <option value="OFFICE">Office</option>
-                        <option value="RETAIL">Retail</option>
-                    </Select>
-                </div>
-
-                {/* Status Filter */}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Status
-                    </label>
-                    <Select
-                        value={filters.status || ''}
-                        onChange={(e) => handleFilterChange('status', e.target.value)}
-                    >
-                        <option value="">All Statuses</option>
-                        <option value="NEW">New</option>
-                        <option value="QUALIFIED">Qualified</option>
-                        <option value="CONTACTED">Contacted</option>
-                        <option value="VISITED">Visited</option>
-                        <option value="NEGOTIATION">Negotiation</option>
-                        <option value="CONVERTED">Converted</option>
-                        <option value="DROPPED">Dropped</option>
-                    </Select>
-                </div>
-
-                {/* Timeline Filter */}
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Timeline
-                    </label>
-                    <Select
-                        value={filters.timeline || ''}
-                        onChange={(e) => handleFilterChange('timeline', e.target.value)}
-                    >
-                        <option value="">All Timelines</option>
-                        <option value="ZERO_TO_THREE_MONTHS">0-3 Months</option>
-                        <option value="THREE_TO_SIX_MONTHS">3-6 Months</option>
-                        <option value="MORE_THAN_SIX_MONTHS">6+ Months</option>
-                        <option value="EXPLORING">Just Exploring</option>
-                    </Select>
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+        >
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center space-x-2">
+                    <FunnelIcon className="w-5 h-5 text-blue-600" />
+                    <h3 className="text-lg font-semibold text-gray-900">Filter Leads</h3>
                 </div>
             </div>
+            
+            <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-6">
+                    {/* Search */}
+                    <div className="lg:col-span-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <div className="flex items-center space-x-2">
+                                <MagnifyingGlassIcon className="w-4 h-4" />
+                                <span>Search</span>
+                            </div>
+                        </label>
+                        <div className="relative">
+                            <Input
+                                type="text"
+                                placeholder="Search by name, phone, or email..."
+                                value={searchValue}
+                                onChange={(e) => handleSearchChange(e.target.value)}
+                                className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                            />
+                            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        </div>
+                    </div>
 
-            <div className="mt-4 flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                        <label className="text-sm font-medium text-gray-700">Sort by:</label>
+                    {/* City Filter */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <div className="flex items-center space-x-2">
+                                <MapPinIcon className="w-4 h-4" />
+                                <span>City</span>
+                            </div>
+                        </label>
                         <Select
-                            value={filters.sortBy}
-                            onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+                            value={filters.city || ''}
+                            onChange={(e) => handleFilterChange('city', e.target.value)}
+                            className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
                         >
-                            <option value="updatedAt">Last Updated</option>
-                            <option value="createdAt">Created Date</option>
-                            <option value="fullName">Name</option>
+                            <option value="">All Cities</option>
+                            <option value="CHANDIGARH">Chandigarh</option>
+                            <option value="MOHALI">Mohali</option>
+                            <option value="ZIRAKPUR">Zirakpur</option>
+                            <option value="PANCHKULA">Panchkula</option>
+                            <option value="OTHER">Other</option>
                         </Select>
                     </div>
 
-                    <div className="flex items-center space-x-2">
-                        <label className="text-sm font-medium text-gray-700">Order:</label>
+                    {/* Property Type Filter */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <div className="flex items-center space-x-2">
+                                <HomeIcon className="w-4 h-4" />
+                                <span>Property Type</span>
+                            </div>
+                        </label>
                         <Select
-                            value={filters.sortOrder}
-                            onChange={(e) => handleFilterChange('sortOrder', e.target.value)}
+                            value={filters.propertyType || ''}
+                            onChange={(e) => handleFilterChange('propertyType', e.target.value)}
+                            className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
                         >
-                            <option value="desc">Newest First</option>
-                            <option value="asc">Oldest First</option>
+                            <option value="">All Types</option>
+                            <option value="APARTMENT">Apartment</option>
+                            <option value="VILLA">Villa</option>
+                            <option value="PLOT">Plot</option>
+                            <option value="OFFICE">Office</option>
+                            <option value="RETAIL">Retail</option>
+                        </Select>
+                    </div>
+
+                    {/* Status Filter */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <div className="flex items-center space-x-2">
+                                <CheckCircleIcon className="w-4 h-4" />
+                                <span>Status</span>
+                            </div>
+                        </label>
+                        <Select
+                            value={filters.status || ''}
+                            onChange={(e) => handleFilterChange('status', e.target.value)}
+                            className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                        >
+                            <option value="">All Statuses</option>
+                            <option value="NEW">New</option>
+                            <option value="QUALIFIED">Qualified</option>
+                            <option value="CONTACTED">Contacted</option>
+                            <option value="VISITED">Visited</option>
+                            <option value="NEGOTIATION">Negotiation</option>
+                            <option value="CONVERTED">Converted</option>
+                            <option value="DROPPED">Dropped</option>
+                        </Select>
+                    </div>
+
+                    {/* Timeline Filter */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <div className="flex items-center space-x-2">
+                                <ClockIcon className="w-4 h-4" />
+                                <span>Timeline</span>
+                            </div>
+                        </label>
+                        <Select
+                            value={filters.timeline || ''}
+                            onChange={(e) => handleFilterChange('timeline', e.target.value)}
+                            className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                        >
+                            <option value="">All Timelines</option>
+                            <option value="ZERO_TO_THREE_MONTHS">0-3 Months</option>
+                            <option value="THREE_TO_SIX_MONTHS">3-6 Months</option>
+                            <option value="MORE_THAN_SIX_MONTHS">6+ Months</option>
+                            <option value="EXPLORING">Just Exploring</option>
                         </Select>
                     </div>
                 </div>
 
-                <Button
-                    variant="outline"
-                    onClick={handleClearFilters}
-                    className="text-sm"
-                >
-                    Clear All Filters
-                </Button>
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                            <div className="flex items-center space-x-2">
+                                <label className="text-sm font-medium text-gray-700">Sort by:</label>
+                                <Select
+                                    value={filters.sortBy}
+                                    onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+                                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                                >
+                                    <option value="updatedAt">Last Updated</option>
+                                    <option value="createdAt">Created Date</option>
+                                    <option value="fullName">Name</option>
+                                </Select>
+                            </div>
+
+                            <div className="flex items-center space-x-2">
+                                <label className="text-sm font-medium text-gray-700">Order:</label>
+                                <Select
+                                    value={filters.sortOrder}
+                                    onChange={(e) => handleFilterChange('sortOrder', e.target.value)}
+                                    className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
+                                >
+                                    <option value="desc">Newest First</option>
+                                    <option value="asc">Oldest First</option>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <Button
+                            variant="outline"
+                            onClick={handleClearFilters}
+                            className="border-gray-300 hover:border-red-400 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
+                        >
+                            <XMarkIcon className="w-4 h-4 mr-2" />
+                            Clear All Filters
+                        </Button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </motion.div>
     )
 }

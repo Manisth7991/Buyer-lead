@@ -8,6 +8,7 @@ import { BuyersFilters } from '@/components/buyers/BuyersFilters'
 import { Pagination } from '@/components/ui/pagination'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { PlusIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from '@heroicons/react/24/outline'
 
 interface BuyersPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -80,67 +81,139 @@ export default async function BuyersPage({ searchParams }: BuyersPageProps) {
   }))
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          {/* Header */}
-          <div className="sm:flex sm:items-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <div className="sm:flex sm:items-center sm:justify-between">
             <div className="sm:flex-auto">
-              <h1 className="text-3xl font-bold text-gray-900">Buyer Leads</h1>
-              <p className="mt-2 text-sm text-gray-700">
-                Manage your buyer leads and track their progress.
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Buyer Leads</h1>
+              <p className="text-lg text-gray-600">
+                Manage your buyer leads and track their progress through the sales pipeline.
               </p>
             </div>
-            <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none space-x-2">
-              <Link href="/buyers/new">
-                <Button>Add New Lead</Button>
-              </Link>
-              <Link href="/buyers/import">
-                <Button variant="outline">Import CSV</Button>
-              </Link>
-              <a
-                href={`/api/buyers/export?${new URLSearchParams(queryParams).toString()}`}
-                download
-              >
-                <Button variant="outline">Export CSV</Button>
-              </a>
+            <div className="mt-6 sm:mt-0 sm:ml-16 sm:flex-none">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="/buyers/new">
+                  <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-lg transition-all duration-200 hover:shadow-xl">
+                    <PlusIcon className="w-5 h-5 mr-2" />
+                    Add New Lead
+                  </Button>
+                </Link>
+                <div className="flex gap-2">
+                  <Link href="/buyers/import">
+                    <Button variant="outline" className="flex-1 sm:flex-none border-gray-300 hover:border-gray-400 shadow-sm transition-all duration-200">
+                      <DocumentArrowUpIcon className="w-5 h-5 mr-2" />
+                      Import CSV
+                    </Button>
+                  </Link>
+                  <a
+                    href={`/api/buyers/export?${new URLSearchParams(queryParams).toString()}`}
+                    download
+                  >
+                    <Button variant="outline" className="flex-1 sm:flex-none border-gray-300 hover:border-gray-400 shadow-sm transition-all duration-200">
+                      <DocumentArrowDownIcon className="w-5 h-5 mr-2" />
+                      Export CSV
+                    </Button>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Filters */}
-          <div className="mt-6">
-            <BuyersFilters initialFilters={validatedParams} />
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-200 hover:shadow-md">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <div className="w-4 h-4 bg-blue-600 rounded"></div>
+                </div>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Total Leads</p>
+                <p className="text-2xl font-semibold text-gray-900">{total}</p>
+              </div>
+            </div>
           </div>
-
-          {/* Results summary */}
-          <div className="mt-6 text-sm text-gray-700">
-            Showing {(validatedParams.page - 1) * validatedParams.limit + 1} to{' '}
-            {Math.min(validatedParams.page * validatedParams.limit, total)} of {total} results
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-200 hover:shadow-md">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                  <div className="w-4 h-4 bg-green-600 rounded"></div>
+                </div>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Active Leads</p>
+                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: any) => ['NEW', 'CONTACTED', 'QUALIFIED', 'VIEWING', 'NEGOTIATING'].includes(b.status)).length}</p>
+              </div>
+            </div>
           </div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-200 hover:shadow-md">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <div className="w-4 h-4 bg-purple-600 rounded"></div>
+                </div>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">Closed</p>
+                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: any) => b.status === 'CLOSED').length}</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-all duration-200 hover:shadow-md">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                  <div className="w-4 h-4 bg-yellow-600 rounded"></div>
+                </div>
+              </div>
+              <div className="ml-4">
+                <p className="text-sm font-medium text-gray-600">This Page</p>
+                <p className="text-2xl font-semibold text-gray-900">{buyers.length}</p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          {/* Table */}
-          <div className="mt-4">
-            <BuyersTable
-              buyers={transformedBuyers}
-              currentUserId={session.user.id}
+        {/* Filters */}
+        <div className="mb-6">
+          <BuyersFilters initialFilters={validatedParams} />
+        </div>
+
+        {/* Results summary */}
+        <div className="mb-6 flex items-center justify-between">
+          <div className="text-sm text-gray-600 bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
+            Showing <span className="font-medium text-gray-900">{(validatedParams.page - 1) * validatedParams.limit + 1}</span> to{' '}
+            <span className="font-medium text-gray-900">{Math.min(validatedParams.page * validatedParams.limit, total)}</span> of{' '}
+            <span className="font-medium text-gray-900">{total}</span> results
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="mb-8">
+          <BuyersTable
+            buyers={transformedBuyers}
+            currentUserId={session.user.id}
+          />
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center">
+            <Pagination
+              currentPage={validatedParams.page}
+              totalPages={totalPages}
+              onPageChange={(page) => {
+                const params = new URLSearchParams(queryParams)
+                params.set('page', page.toString())
+                window.location.href = `/buyers?${params.toString()}`
+              }}
             />
           </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-6 flex justify-center">
-              <Pagination
-                currentPage={validatedParams.page}
-                totalPages={totalPages}
-                onPageChange={(page) => {
-                  const params = new URLSearchParams(queryParams)
-                  params.set('page', page.toString())
-                  window.location.href = `/buyers?${params.toString()}`
-                }}
-              />
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   )
