@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Input } from '@/components/ui/input'
@@ -29,11 +29,11 @@ export function BuyersFilters({ initialFilters }: BuyersFiltersProps) {
     const [searchValue, setSearchValue] = useState(initialFilters.search || '')
 
     // Debounced search function
-    const debounce = useCallback((func: Function, delay: number) => {
+    const debounce = useCallback(<T extends unknown[]>(func: (...args: T) => void, delay: number) => {
         let timeoutId: NodeJS.Timeout
-        return (...args: any[]) => {
+        return (...args: T) => {
             clearTimeout(timeoutId)
-            timeoutId = setTimeout(() => func.apply(null, args), delay)
+            timeoutId = setTimeout(() => func(...args), delay)
         }
     }, [])
 

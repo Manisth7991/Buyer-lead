@@ -23,7 +23,7 @@ export default async function NewBuyerPage() {
                         <div>
                             <h1 className="text-3xl font-bold text-gray-900">Add New Buyer Lead</h1>
                             <p className="text-lg text-gray-600">
-                                Fill in the buyer's information and requirements to create a new lead.
+                                Fill in the buyer&apos;s information and requirements to create a new lead.
                             </p>
                         </div>
                     </div>

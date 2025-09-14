@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 
-interface TableProps extends React.HTMLAttributes<HTMLTableElement> { }
+type TableProps = React.HTMLAttributes<HTMLTableElement>
 
 export function Table({ className, ...props }: TableProps) {
     return (
@@ -13,7 +13,7 @@ export function Table({ className, ...props }: TableProps) {
     )
 }
 
-interface TableHeaderProps extends React.HTMLAttributes<HTMLTableSectionElement> { }
+type TableHeaderProps = React.HTMLAttributes<HTMLTableSectionElement>
 
 export function TableHeader({ className, ...props }: TableHeaderProps) {
     return (
@@ -21,7 +21,7 @@ export function TableHeader({ className, ...props }: TableHeaderProps) {
     )
 }
 
-interface TableBodyProps extends React.HTMLAttributes<HTMLTableSectionElement> { }
+type TableBodyProps = React.HTMLAttributes<HTMLTableSectionElement>
 
 export function TableBody({ className, ...props }: TableBodyProps) {
     return (
@@ -32,7 +32,7 @@ export function TableBody({ className, ...props }: TableBodyProps) {
     )
 }
 
-interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> { }
+type TableRowProps = React.HTMLAttributes<HTMLTableRowElement>
 
 export function TableRow({ className, ...props }: TableRowProps) {
     return (
@@ -46,7 +46,7 @@ export function TableRow({ className, ...props }: TableRowProps) {
     )
 }
 
-interface TableHeadProps extends React.ThHTMLAttributes<HTMLTableCellElement> { }
+type TableHeadProps = React.ThHTMLAttributes<HTMLTableCellElement>
 
 export function TableHead({ className, ...props }: TableHeadProps) {
     return (
@@ -60,7 +60,7 @@ export function TableHead({ className, ...props }: TableHeadProps) {
     )
 }
 
-interface TableCellProps extends React.TdHTMLAttributes<HTMLTableCellElement> { }
+type TableCellProps = React.TdHTMLAttributes<HTMLTableCellElement>
 
 export function TableCell({ className, ...props }: TableCellProps) {
     return (

@@ -1,6 +1,6 @@
 'use client'
 
-import { signIn, getSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -22,7 +22,7 @@ export default function SignIn() {
             } else {
                 setMessage('Demo login failed')
             }
-        } catch (error) {
+        } catch {
             setMessage('An error occurred')
         } finally {
             setLoading(false)
@@ -53,8 +53,8 @@ export default function SignIn() {
 
                     {message && (
                         <div className={`mt-4 p-3 rounded-md text-sm ${message.includes('success')
-                                ? 'bg-green-100 text-green-700'
-                                : 'bg-red-100 text-red-700'
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
                             }`}>
                             {message}
                         </div>

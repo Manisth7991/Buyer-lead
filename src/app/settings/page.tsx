@@ -22,7 +22,7 @@ import {
 } from '@heroicons/react/24/outline'
 
 export default function SettingsPage() {
-    const { theme, language, setTheme, setLanguage, actualTheme, t } = useSettings()
+    const { theme, language, setTheme, setLanguage, t } = useSettings()
     const [activeTab, setActiveTab] = useState('general')
     const [showPassword, setShowPassword] = useState(false)
     const [localSettings, setLocalSettings] = useState({

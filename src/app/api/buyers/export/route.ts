@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db'
 import { generateCSV } from '@/lib/csv'
 import { BuyerFilterSchema } from '@/lib/validations/buyer'
 import { ZodError } from 'zod'
+import { Buyer } from '@/types'
 
 export async function GET(request: NextRequest) {
     try {
@@ -22,7 +23,7 @@ export async function GET(request: NextRequest) {
 
         const validatedParams = BuyerFilterSchema.omit({ page: true, limit: true }).parse(queryParams)
 
-        const where: any = {}
+        const where: Record<string, unknown> = {}
 
         // Search across name, phone, and email (SQLite compatible)
         if (validatedParams.search) {
@@ -46,7 +47,7 @@ export async function GET(request: NextRequest) {
             },
         })
 
-        const csvContent = generateCSV(buyers as any[])
+        const csvContent = generateCSV(buyers as Buyer[])
 
         const headers = new Headers()
         headers.set('Content-Type', 'text/csv')

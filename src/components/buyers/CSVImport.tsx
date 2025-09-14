@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { BuyersAPI } from '@/lib/api/buyers'
 
 interface CSVRow {
     fullName: string
@@ -105,7 +104,7 @@ export function CSVImport() {
         return rows
     }
 
-    const validateRow = (row: CSVRow, index: number): string[] => {
+    const validateRow = (row: CSVRow): string[] => {
         const errors: string[] = []
 
         if (!row.fullName || row.fullName.length < 2) {
@@ -173,7 +172,7 @@ export function CSVImport() {
             // Validate each row
             const newValidationErrors: Record<number, string[]> = {}
             data.forEach((row, index) => {
-                const rowErrors = validateRow(row, index)
+                const rowErrors = validateRow(row)
                 if (rowErrors.length > 0) {
                     newValidationErrors[index] = rowErrors
                 }
@@ -262,7 +261,7 @@ Jane Smith,9876543211,jane@example.com,MOHALI,VILLA,THREE_BHK,BUY,THREE_TO_SIX_M
                     <li>• Required fields: fullName, phone, city, propertyType, purpose, timeline, source</li>
                     <li>• BHK is required for APARTMENT and VILLA property types</li>
                     <li>• Budget fields should be numbers (without currency symbols)</li>
-                    <li>• Tags should be in JSON array format: ["tag1", "tag2"]</li>
+                    <li>• Tags should be in JSON array format: [&quot;tag1&quot;, &quot;tag2&quot;]</li>
                 </ul>
 
                 <Button

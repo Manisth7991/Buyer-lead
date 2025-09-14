@@ -41,7 +41,15 @@ export async function GET(request: NextRequest) {
             }
         })
 
-        const results = buyers.map((buyer: any) => ({
+        const results = buyers.map((buyer: {
+            id: string;
+            fullName: string;
+            phone: string;
+            email: string | null;
+            city: string;
+            propertyType: string;
+            status: string;
+        }) => ({
             ...buyer,
             type: 'buyer',
             title: buyer.fullName,

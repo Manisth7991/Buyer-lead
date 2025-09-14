@@ -25,7 +25,7 @@ export default async function BuyersPage() {
 
                             <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
                                 <div className="text-sm text-blue-700">
-                                    <p className="font-medium mb-2">✅ What's Working:</p>
+                                    <p className="font-medium mb-2">✅ What&apos;s Working:</p>
                                     <ul className="list-disc list-inside space-y-1 text-left">
                                         <li>Authentication system</li>
                                         <li>Complete API endpoints for CRUD operations</li>

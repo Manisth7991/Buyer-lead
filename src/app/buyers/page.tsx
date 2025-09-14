@@ -9,6 +9,7 @@ import { Pagination } from '@/components/ui/pagination'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { PlusIcon, DocumentArrowDownIcon, DocumentArrowUpIcon } from '@heroicons/react/24/outline'
+import { Buyer } from '@/types'
 
 interface BuyersPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>
@@ -37,7 +38,7 @@ export default async function BuyersPage({ searchParams }: BuyersPageProps) {
   const validatedParams = BuyerFilterSchema.parse(queryParams)
 
   // Build where clause for filtering
-  const where: any = {}
+  const where: Record<string, unknown> = {}
 
   // Search across name, phone, and email (SQLite compatible)
   if (validatedParams.search) {
@@ -75,7 +76,7 @@ export default async function BuyersPage({ searchParams }: BuyersPageProps) {
   const totalPages = Math.ceil(total / validatedParams.limit)
 
   // Transform buyers data for client
-  const transformedBuyers = buyers.map((buyer: any) => ({
+  const transformedBuyers = buyers.map((buyer: Buyer & { owner: { id: string; name: string | null; email: string | null } }) => ({
     ...buyer,
     tags: JSON.parse(buyer.tags || '[]')
   }))
@@ -149,7 +150,7 @@ export default async function BuyersPage({ searchParams }: BuyersPageProps) {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Active Leads</p>
-                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: any) => ['NEW', 'CONTACTED', 'QUALIFIED', 'VISITED', 'NEGOTIATION'].includes(b.status)).length}</p>
+                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: Buyer) => ['NEW', 'CONTACTED', 'QUALIFIED', 'VISITED', 'NEGOTIATION'].includes(b.status)).length}</p>
               </div>
             </div>
           </div>
@@ -162,7 +163,7 @@ export default async function BuyersPage({ searchParams }: BuyersPageProps) {
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Closed</p>
-                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: any) => b.status === 'CONVERTED').length}</p>
+                <p className="text-2xl font-semibold text-gray-900">{buyers.filter((b: Buyer) => b.status === 'CONVERTED').length}</p>
               </div>
             </div>
           </div>

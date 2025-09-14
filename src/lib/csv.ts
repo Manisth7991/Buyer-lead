@@ -39,11 +39,12 @@ export async function parseCSV(csvContent: string): Promise<CSVValidationResult>
             try {
                 const validatedRecord = CSVBuyerSchema.parse(record)
                 result.valid.push(validatedRecord)
-            } catch (error: any) {
+            } catch (error: unknown) {
                 const fieldErrors: Record<string, string[]> = {}
 
-                if (error.errors) {
-                    for (const err of error.errors) {
+                if (error && typeof error === 'object' && 'errors' in error) {
+                    const zodError = error as { errors: Array<{ path: string[]; message: string }> }
+                    for (const err of zodError.errors) {
                         const path = err.path.join('.')
                         if (!fieldErrors[path]) {
                             fieldErrors[path] = []

@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
     try {
         const session = await getServerSession(authOptions)
 
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
         ])
 
         // Process stats
-        const statusCounts = stats.reduce((acc: Record<string, number>, stat: any) => {
+        const statusCounts = stats.reduce((acc: Record<string, number>, stat: { status: string; _count: { status: number } }) => {
             acc[stat.status] = stat._count.status
             return acc
         }, {})

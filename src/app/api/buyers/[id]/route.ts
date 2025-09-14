@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { UpdateBuyerSchema } from '@/lib/validations/buyer'
 import { ZodError } from 'zod'
+import { Prisma } from '@prisma/client'
 
 // GET /api/buyers/[id] - Get single buyer
 export async function GET(
@@ -115,7 +116,7 @@ export async function PUT(
         // Convert tags array to JSON string
         const tagsJson = JSON.stringify(validatedData.tags || [])
 
-        const updatedBuyer = await prisma.$transaction(async (tx: any) => {
+        const updatedBuyer = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
             // Update buyer
             const buyer = await tx.buyer.update({
                 where: { id },
@@ -133,11 +134,11 @@ export async function PUT(
             })
 
             // Create history entry with diff
-            const diff: any = {}
+            const diff: Record<string, { old: unknown; new: unknown }> = {}
             Object.keys(validatedData).forEach(key => {
                 if (key !== 'id' && key !== 'updatedAt') {
-                    const newValue = (validatedData as any)[key]
-                    const oldValue = (currentBuyer as any)?.[key]
+                    const newValue = (validatedData as Record<string, unknown>)[key]
+                    const oldValue = (currentBuyer as Record<string, unknown>)?.[key]
 
                     if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
                         diff[key] = { old: oldValue, new: newValue }
@@ -210,7 +211,7 @@ export async function DELETE(
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
         }
 
-        await prisma.$transaction(async (tx: any) => {
+        await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
             // Create history entry
             await tx.buyerHistory.create({
                 data: {

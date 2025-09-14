@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { parseCSV, validateCSVHeaders, CSVError } from '@/lib/csv'
+import { Prisma } from '@prisma/client'
 
 export async function POST(request: NextRequest) {
     try {
@@ -41,7 +42,7 @@ export async function POST(request: NextRequest) {
         // Import valid records in a transaction
         let importedCount = 0
         if (result.valid.length > 0) {
-            importedCount = await prisma.$transaction(async (tx: any) => {
+            importedCount = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
                 const buyers = []
 
                 for (const validRecord of result.valid) {

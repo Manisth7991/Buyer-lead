@@ -8,7 +8,6 @@ import {
     CurrencyDollarIcon,
     ClockIcon,
     ArrowTrendingUpIcon,
-    ArrowTrendingDownIcon,
     CalendarIcon
 } from '@heroicons/react/24/outline'
 

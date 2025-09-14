@@ -4,6 +4,8 @@ import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { CreateBuyerSchema, BuyerFilterSchema } from '@/lib/validations/buyer'
 import { ZodError } from 'zod'
+import { Prisma } from '@prisma/client'
+import { Buyer } from '@/types'
 
 // GET /api/buyers - List buyers with filtering and pagination
 export async function GET(request: NextRequest) {
@@ -18,7 +20,7 @@ export async function GET(request: NextRequest) {
 
         const validatedParams = BuyerFilterSchema.parse(queryParams)
 
-        const where: any = {}
+        const where: Record<string, unknown> = {}
 
         // Search across name, phone, and email (SQLite compatible)
         if (validatedParams.search) {
@@ -57,7 +59,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
             success: true,
             data: {
-                buyers: buyers.map((buyer: any) => ({
+                buyers: buyers.map((buyer: Buyer & { owner: { id: string; name: string | null; email: string | null } }) => ({
                     ...buyer,
                     tags: JSON.parse(buyer.tags || '[]')
                 })),
@@ -101,7 +103,7 @@ export async function POST(request: NextRequest) {
         const validatedData = CreateBuyerSchema.parse(body)
         console.log('Validated data:', validatedData)
 
-        const buyer = await prisma.$transaction(async (tx: any) => {
+        const buyer = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
             // Create the buyer
             const newBuyer = await tx.buyer.create({
                 data: {

@@ -10,9 +10,7 @@ import {
     ChartBarIcon,
     PlusIcon,
     ArrowTrendingUpIcon,
-    ClockIcon,
     CheckCircleIcon,
-    XCircleIcon,
     EyeIcon,
     DocumentArrowUpIcon
 } from '@heroicons/react/24/outline'
@@ -21,7 +19,15 @@ import { StatusBadge } from '@/components/ui/status-badge'
 
 interface DashboardStats {
     totalBuyers: number
-    recentBuyers: any[]
+    recentBuyers: Array<{
+        id: string
+        fullName: string
+        phone: string
+        email: string | null
+        status: string
+        createdAt: string
+        owner: { name: string | null }
+    }>
     statusCounts: Record<string, number>
 }
 
@@ -110,7 +116,7 @@ export default function DashboardPage() {
                                 Welcome back, {session.user?.name?.split(' ')[0]}
                             </h1>
                             <p className="text-lg text-gray-600 dark:text-gray-300">
-                                Here's what's happening with your leads today
+                                Here&apos;s what&apos;s happening with your leads today
                             </p>
                         </div>
                         <div className="mt-6 sm:mt-0">
@@ -249,7 +255,7 @@ export default function DashboardPage() {
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">Recent Leads</h3>
                             <div className="space-y-4">
                                 {stats.recentBuyers.length > 0 ? (
-                                    stats.recentBuyers.map((buyer: any, index: number) => (
+                                    stats.recentBuyers.map((buyer: DashboardStats['recentBuyers'][0], index: number) => (
                                         <motion.div
                                             key={buyer.id}
                                             initial={{ opacity: 0, y: 20 }}

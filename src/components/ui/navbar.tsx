@@ -154,7 +154,7 @@ export function TopNavbar({ onMenuClick }: TopNavbarProps) {
                                 className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 py-4 z-50"
                             >
                                 <div className="text-center text-gray-500 text-sm">
-                                    No results found for "{searchQuery}"
+                                    No results found for &quot;{searchQuery}&quot;
                                 </div>
                             </motion.div>
                         )}
