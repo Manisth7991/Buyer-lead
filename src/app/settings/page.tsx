@@ -1,10 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { useSettings } from '@/contexts/SettingsContext'
 import {
     Cog6ToothIcon,
     BellIcon,
@@ -21,13 +22,12 @@ import {
 } from '@heroicons/react/24/outline'
 
 export default function SettingsPage() {
+    const { theme, language, setTheme, setLanguage, actualTheme, t } = useSettings()
     const [activeTab, setActiveTab] = useState('general')
     const [showPassword, setShowPassword] = useState(false)
-    const [settings, setSettings] = useState({
-        // General settings
-        language: 'english',
+    const [localSettings, setLocalSettings] = useState({
+        // General settings (theme and language are handled by context)
         timezone: 'asia_kolkata',
-        theme: 'light',
         dateFormat: 'dd/mm/yyyy',
 
         // Notification settings
@@ -48,19 +48,29 @@ export default function SettingsPage() {
         passwordMinLength: '8'
     })
 
+    // Load local settings from localStorage
+    useEffect(() => {
+        const savedSettings = localStorage.getItem('localSettings')
+        if (savedSettings) {
+            setLocalSettings(prev => ({ ...prev, ...JSON.parse(savedSettings) }))
+        }
+    }, [])
+
     const tabs = [
-        { id: 'general', name: 'General', icon: Cog6ToothIcon },
-        { id: 'notifications', name: 'Notifications', icon: BellIcon },
-        { id: 'privacy', name: 'Privacy', icon: ShieldCheckIcon },
-        { id: 'security', name: 'Security', icon: ShieldCheckIcon }
+        { id: 'general', name: t('general') || 'General', icon: Cog6ToothIcon },
+        { id: 'notifications', name: t('notifications') || 'Notifications', icon: BellIcon },
+        { id: 'privacy', name: t('privacy') || 'Privacy', icon: ShieldCheckIcon },
+        { id: 'security', name: t('security') || 'Security', icon: ShieldCheckIcon }
     ]
 
-    const handleSettingChange = (key: string, value: any) => {
-        setSettings(prev => ({ ...prev, [key]: value }))
+    const handleLocalSettingChange = (key: string, value: any) => {
+        setLocalSettings(prev => ({ ...prev, [key]: value }))
     }
 
     const handleSave = () => {
-        console.log('Saving settings:', settings)
+        // Save local settings to localStorage
+        localStorage.setItem('localSettings', JSON.stringify(localSettings))
+        console.log('Saving settings:', { theme, language, ...localSettings })
         alert('Settings saved successfully!')
     }
 
@@ -71,17 +81,17 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                         <div className="flex items-center space-x-2">
                             <GlobeAltIcon className="w-4 h-4" />
-                            <span>Language</span>
+                            <span>{t('language')}</span>
                         </div>
                     </label>
                     <Select
-                        value={settings.language}
-                        onChange={(e) => handleSettingChange('language', e.target.value)}
+                        value={language}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setLanguage(e.target.value as any)}
                         className="cursor-pointer"
                     >
                         <option value="english">English</option>
-                        <option value="hindi">Hindi</option>
-                        <option value="punjabi">Punjabi</option>
+                        <option value="hindi">Hindi (हिंदी)</option>
+                        <option value="punjabi">Punjabi (ਪੰਜਾਬੀ)</option>
                     </Select>
                 </div>
 
@@ -90,8 +100,8 @@ export default function SettingsPage() {
                         Timezone
                     </label>
                     <Select
-                        value={settings.timezone}
-                        onChange={(e) => handleSettingChange('timezone', e.target.value)}
+                        value={localSettings.timezone}
+                        onChange={(e) => handleLocalSettingChange('timezone', e.target.value)}
                         className="cursor-pointer"
                     >
                         <option value="asia_kolkata">Asia/Kolkata (IST)</option>
@@ -102,7 +112,7 @@ export default function SettingsPage() {
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Theme
+                        {t('theme')}
                     </label>
                     <div className="flex space-x-4">
                         {[
@@ -112,10 +122,10 @@ export default function SettingsPage() {
                         ].map(({ value, icon: Icon, label }) => (
                             <button
                                 key={value}
-                                onClick={() => handleSettingChange('theme', value)}
-                                className={`cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all duration-200 ${settings.theme === value
-                                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                        : 'border-gray-300 hover:border-gray-400'
+                                onClick={() => setTheme(value as 'light' | 'dark' | 'system')}
+                                className={`cursor-pointer flex items-center space-x-2 px-4 py-2 rounded-lg border transition-all duration-200 ${theme === value
+                                    ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                    : 'border-gray-300 hover:border-gray-400'
                                     }`}
                             >
                                 <Icon className="w-4 h-4" />
@@ -130,8 +140,8 @@ export default function SettingsPage() {
                         Date Format
                     </label>
                     <Select
-                        value={settings.dateFormat}
-                        onChange={(e) => handleSettingChange('dateFormat', e.target.value)}
+                        value={localSettings.dateFormat}
+                        onChange={(e) => handleLocalSettingChange('dateFormat', e.target.value)}
                         className="cursor-pointer"
                     >
                         <option value="dd/mm/yyyy">DD/MM/YYYY</option>
@@ -161,12 +171,12 @@ export default function SettingsPage() {
                         </div>
                     </div>
                     <button
-                        onClick={() => handleSettingChange(key, !settings[key as keyof typeof settings])}
-                        className={`cursor-pointer relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${settings[key as keyof typeof settings] ? 'bg-blue-600' : 'bg-gray-200'
+                        onClick={() => handleLocalSettingChange(key, !localSettings[key as keyof typeof localSettings])}
+                        className={`cursor-pointer relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${localSettings[key as keyof typeof localSettings] ? 'bg-blue-600' : 'bg-gray-200'
                             }`}
                     >
                         <span
-                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${settings[key as keyof typeof settings] ? 'translate-x-6' : 'translate-x-1'
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${localSettings[key as keyof typeof localSettings] ? 'translate-x-6' : 'translate-x-1'
                                 }`}
                         />
                     </button>
@@ -182,8 +192,8 @@ export default function SettingsPage() {
                     Profile Visibility
                 </label>
                 <Select
-                    value={settings.profileVisibility}
-                    onChange={(e) => handleSettingChange('profileVisibility', e.target.value)}
+                    value={localSettings.profileVisibility}
+                    onChange={(e) => handleLocalSettingChange('profileVisibility', e.target.value)}
                     className="cursor-pointer"
                 >
                     <option value="public">Public</option>
@@ -205,12 +215,12 @@ export default function SettingsPage() {
                         <p className="text-sm text-gray-500">{description}</p>
                     </div>
                     <button
-                        onClick={() => handleSettingChange(key, !settings[key as keyof typeof settings])}
-                        className={`cursor-pointer relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${settings[key as keyof typeof settings] ? 'bg-blue-600' : 'bg-gray-200'
+                        onClick={() => handleLocalSettingChange(key, !localSettings[key as keyof typeof localSettings])}
+                        className={`cursor-pointer relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${localSettings[key as keyof typeof localSettings] ? 'bg-blue-600' : 'bg-gray-200'
                             }`}
                     >
                         <span
-                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${settings[key as keyof typeof settings] ? 'translate-x-6' : 'translate-x-1'
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${localSettings[key as keyof typeof localSettings] ? 'translate-x-6' : 'translate-x-1'
                                 }`}
                         />
                     </button>
@@ -227,12 +237,12 @@ export default function SettingsPage() {
                     <p className="text-sm text-gray-500">Add an extra layer of security to your account</p>
                 </div>
                 <button
-                    onClick={() => handleSettingChange('twoFactorAuth', !settings.twoFactorAuth)}
-                    className={`cursor-pointer relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${settings.twoFactorAuth ? 'bg-blue-600' : 'bg-gray-200'
+                    onClick={() => handleLocalSettingChange('twoFactorAuth', !localSettings.twoFactorAuth)}
+                    className={`cursor-pointer relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${localSettings.twoFactorAuth ? 'bg-blue-600' : 'bg-gray-200'
                         }`}
                 >
                     <span
-                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${settings.twoFactorAuth ? 'translate-x-6' : 'translate-x-1'
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ${localSettings.twoFactorAuth ? 'translate-x-6' : 'translate-x-1'
                             }`}
                     />
                 </button>
@@ -244,8 +254,8 @@ export default function SettingsPage() {
                 </label>
                 <Input
                     type="number"
-                    value={settings.sessionTimeout}
-                    onChange={(e) => handleSettingChange('sessionTimeout', e.target.value)}
+                    value={localSettings.sessionTimeout}
+                    onChange={(e) => handleLocalSettingChange('sessionTimeout', e.target.value)}
                     className="cursor-pointer"
                     min="5"
                     max="1440"
@@ -338,8 +348,8 @@ export default function SettingsPage() {
                                         key={id}
                                         onClick={() => setActiveTab(id)}
                                         className={`cursor-pointer w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${activeTab === id
-                                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                                            ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                                            : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                                             }`}
                                     >
                                         <Icon className="w-5 h-5" />
