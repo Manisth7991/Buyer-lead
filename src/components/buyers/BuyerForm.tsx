@@ -47,11 +47,25 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
     notes: initialData?.notes || '',
     updatedAt: initialData?.updatedAt || new Date().toISOString(), // Include updatedAt for concurrency control
   })
-  const [tags, setTags] = useState<string[]>(
-    initialData?.tags ? JSON.parse(initialData.tags) : []
-  )
+  const [tags, setTags] = useState<string[]>(() => {
+    if (!initialData?.tags) return []
+    if (typeof initialData.tags === 'string') {
+      try {
+        return JSON.parse(initialData.tags)
+      } catch {
+        return []
+      }
+    }
+    if (Array.isArray(initialData.tags)) {
+      return initialData.tags
+    }
+    return []
+  })
   const [tagInput, setTagInput] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Utility function to ensure tags is always an array
+  const safeTagsArray = Array.isArray(tags) ? tags : []
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -101,7 +115,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
         ...formData,
         budgetMin: formData.budgetMin ? parseInt(formData.budgetMin) : undefined,
         budgetMax: formData.budgetMax ? parseInt(formData.budgetMax) : undefined,
-        tags: JSON.stringify(tags),
+        tags: JSON.stringify(safeTagsArray),
       }
 
       if (mode === 'create') {
@@ -113,7 +127,7 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
           id: buyerId,
           status: initialData?.status || 'NEW',
           updatedAt: formData.updatedAt, // Use original updatedAt for concurrency control
-          tags: JSON.stringify(tags), // Convert tags array to JSON string for API
+          tags: JSON.stringify(safeTagsArray), // Convert tags array to JSON string for API
         }
         await BuyersAPI.updateBuyer(buyerId, updatePayload)
         router.push(`/buyers/${buyerId}`)
@@ -134,14 +148,14 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
   }
 
   const handleAddTag = () => {
-    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
-      setTags([...tags, tagInput.trim()])
+    if (tagInput.trim() && !safeTagsArray.includes(tagInput.trim())) {
+      setTags([...safeTagsArray, tagInput.trim()])
       setTagInput('')
     }
   }
 
   const handleRemoveTag = (tagToRemove: string) => {
-    setTags(tags.filter(tag => tag !== tagToRemove))
+    setTags(safeTagsArray.filter(tag => tag !== tagToRemove))
   }
 
   return (
@@ -540,61 +554,141 @@ export function BuyerForm({ mode, initialData, buyerId }: BuyerFormProps) {
 
             {/* Tags */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
                 <div className="flex items-center space-x-2">
-                  <TagIcon className="w-4 h-4" />
+                  <TagIcon className="w-5 h-5 text-purple-500" />
                   <span>Tags</span>
+                  <span className="text-xs text-gray-500 font-normal">
+                    ({safeTagsArray.length} tag{safeTagsArray.length !== 1 ? 's' : ''})
+                  </span>
                 </div>
               </label>
-              <div className="flex gap-2 mb-4">
-                <Input
-                  value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
-                  placeholder="Add a tag"
-                  className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 transition-all duration-200"
-                  onKeyPress={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault()
-                      handleAddTag()
-                    }
-                  }}
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleAddTag}
-                  className="border-gray-300 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200"
-                >
-                  <PlusIcon className="w-4 h-4 mr-2" />
-                  Add
-                </Button>
-              </div>
-              {tags.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex flex-wrap gap-2"
-                >
-                  {tags.map((tag, index) => (
-                    <motion.span
-                      key={index}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-50 text-blue-700 border border-blue-200"
+
+              <div className="space-y-4">
+                {/* Tag Input */}
+                <div className="flex gap-2">
+                  <div className="flex-1 relative">
+                    <Input
+                      value={tagInput}
+                      onChange={(e) => setTagInput(e.target.value)}
+                      placeholder="Type a tag and press Enter..."
+                      className="pl-10 border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          handleAddTag()
+                        }
+                      }}
+                    />
+                    <TagIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddTag}
+                    disabled={!tagInput.trim()}
+                    className="px-4 border-purple-300 text-purple-600 hover:border-purple-400 hover:bg-purple-50 hover:text-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  >
+                    <PlusIcon className="w-4 h-4 mr-1" />
+                    Add
+                  </Button>
+                </div>
+
+                {/* Tags Display */}
+                {safeTagsArray.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-medium text-gray-700">Applied Tags:</h4>
+                      {safeTagsArray.length > 3 && (
+                        <button
+                          type="button"
+                          onClick={() => setTags([])}
+                          className="text-xs text-red-500 hover:text-red-700 transition-colors duration-200"
+                        >
+                          Clear all
+                        </button>
+                      )}
+                    </div>
+                    <motion.div
+                      layout
+                      className="flex flex-wrap gap-2 p-3 bg-gradient-to-r from-purple-50/50 to-blue-50/50 rounded-lg border border-purple-100"
                     >
-                      {tag}
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveTag(tag)}
-                        className="ml-2 text-blue-500 hover:text-blue-700 transition-colors duration-200"
+                      {Array.isArray(tags) && safeTagsArray.map((tag, index) => (
+                        <motion.span
+                          key={`${tag}-${index}`}
+                          layout
+                          initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 25,
+                            delay: index * 0.05
+                          }}
+                          className="group inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gradient-to-r from-purple-100 to-blue-100 text-purple-800 border border-purple-200 hover:from-purple-200 hover:to-blue-200 hover:border-purple-300 transition-all duration-200 shadow-sm"
+                        >
+                          <span className="max-w-32 truncate">{tag}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveTag(tag)}
+                            className="ml-2 p-0.5 rounded-full text-purple-500 hover:text-red-500 hover:bg-red-100 transition-all duration-200 group-hover:scale-110"
+                            title={`Remove "${tag}" tag`}
+                          >
+                            <XMarkIcon className="w-3.5 h-3.5" />
+                          </button>
+                        </motion.span>
+                      ))}
+                    </motion.div>
+
+                    {/* Tag suggestions */}
+                    {safeTagsArray.length < 5 && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                        className="flex flex-wrap gap-1.5"
                       >
-                        <XMarkIcon className="w-4 h-4" />
-                      </button>
-                    </motion.span>
-                  ))}
-                </motion.div>
-              )}
+                        <span className="text-xs text-gray-500 mr-2">Quick add:</span>
+                        {['Hot Lead', 'Follow Up', 'Qualified', 'High Priority', 'Urgent'].filter(suggestion =>
+                          !safeTagsArray.includes(suggestion)
+                        ).slice(0, 3).map((suggestion) => (
+                          <button
+                            key={suggestion}
+                            type="button"
+                            onClick={() => {
+                              if (!safeTagsArray.includes(suggestion)) {
+                                setTags([...safeTagsArray, suggestion])
+                              }
+                            }}
+                            className="text-xs px-2 py-1 rounded-md border border-gray-200 text-gray-600 hover:border-purple-300 hover:text-purple-600 hover:bg-purple-50 transition-all duration-200"
+                          >
+                            + {suggestion}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </motion.div>
+                )}
+
+                {/* Empty state */}
+                {safeTagsArray.length === 0 && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-6 border-2 border-dashed border-gray-200 rounded-lg"
+                  >
+                    <TagIcon className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                    <p className="text-sm text-gray-500">No tags added yet</p>
+                    <p className="text-xs text-gray-400 mt-1">Add tags to categorize and organize this lead</p>
+                  </motion.div>
+                )}
+              </div>
             </div>
           </div>
         </motion.div>
